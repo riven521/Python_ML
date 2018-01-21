@@ -1,7 +1,26 @@
 from math import log
 import operator
 import pandas as pd
+import numpy as np
 
+def createDataSet():
+    """
+    简单鱼的鉴定数据集
+    :return: 数据集，特征种类
+    """
+    #特征：1.不浮出水面是否可以生存 No surfacing 2.是否有脚蹼 Flippers 3.属于鱼类 Fish
+
+    readData = pd.read_csv('./watermelonData.csv', encoding='gbk')
+    ndarryData = np.array(readData)
+    dataSet = ndarryData.tolist()
+    print(dataSet)
+    labels = []
+    for item in readData: labels.append(item)
+    print(labels)
+
+    return dataSet, labels
+
+'''
 def createDataSet():
     """
     简单鱼的鉴定数据集
@@ -16,6 +35,7 @@ def createDataSet():
     labels = ['no surfacing','flippers']
     #change to discrete values
     return dataSet, labels
+'''
 
 def calcShannonEnt(dataSet):
     """
@@ -204,28 +224,6 @@ def createPlot(inTree):
     plt.show()
 
 
-def classify(inputTree, featLabels, testVec):
-    firstStr = inputTree.keys()[0]
-    secondDict = inputTree[firstStr]
-    featIndex = featLabels.index(firstStr)
-    key = testVec[featIndex]
-    valueOfFeat = secondDict[key]
-    if isinstance(valueOfFeat, dict):
-        classLabel = classify(valueOfFeat, featLabels, testVec)
-    else:
-        classLabel = valueOfFeat
-    return classLabel
-
-def storeTree(inputTree, filename):
-    import pickle
-    fw = open(filename, 'w', encoding='UTF-8')
-    pickle.dump(inputTree, fw)
-    fw.close()
-
-def grabTree(filename):
-    import pickle
-    fr = open(filename)
-    return pickle.load(fr)
 
 '''___main___'''
 
@@ -233,5 +231,5 @@ def grabTree(filename):
 myDat, labels = createDataSet()
 myTree = createTree(myDat, labels)
 print(myTree)
-createPlot(myTree)
 
+createPlot(myTree)
